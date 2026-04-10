@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "module": "esnext",                                
+    "rootDir": "./src",
+    "outDir": "./dist",  
+    "moduleResolution": "bundler", 
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}
+
+
+/*
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "target": "ES2023",
+    "strict": true,
+    "esModuleInterop": true,
+    "ignoreDeprecations": "6.0"
+  }
+}
+*/ 

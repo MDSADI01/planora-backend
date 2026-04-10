@@ -1,0 +1,150 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum EventType {
+  ONLINE
+  IN_PERSON
+}
+
+enum ParticipantStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  BANNED
+  REGISTERED
+  ATTENDED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  REFUNDED
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+model User {
+  id              String             @id @default(uuid())
+  name            String
+  email           String             @unique
+  password        String
+  role            Role               @default(USER)
+  image           String?
+  organizedEvents Event[]            @relation("OrganizedEvents")
+  participations  EventParticipant[]
+  invitations     Invitation[]
+  payments        Payment[]
+  reviews         Review[]
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+
+}
+
+model Event {
+  id           String             @id @default(uuid())
+  title        String
+  description  String
+  date         DateTime           @db.Date
+  time         String
+  venue        String?
+  type         EventType
+  fee          Float              @default(0)
+  isPrivate    Boolean            @default(false)
+
+  organizerId  String
+  organizer    User               @relation("OrganizedEvents", fields: [organizerId], references: [id],onDelete: Cascade)
+
+  participants EventParticipant[]
+  invitations  Invitation[]
+  payments     Payment[]
+  reviews      Review[]
+
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+
+}
+
+model EventParticipant {
+  id            String            @id @default(uuid())
+  userId        String
+  eventId       String
+  status        ParticipantStatus @default(PENDING)
+  paymentStatus PaymentStatus     @default(PENDING)
+  user          User              @relation(fields: [userId], references: [id],onDelete: Cascade)
+  event         Event             @relation(fields: [eventId], references: [id],onDelete: Cascade)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  @@unique([userId, eventId])
+  
+}
+
+model Invitation {
+  id            String           @id @default(uuid())
+  eventId       String
+  inviteeId     String
+  status        InvitationStatus @default(PENDING)
+  paymentStatus PaymentStatus    @default(PENDING)
+  event         Event            @relation(fields: [eventId], references: [id],onDelete: Cascade)
+  invitee       User             @relation(fields: [inviteeId], references: [id],onDelete: Cascade)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  @@unique([eventId, inviteeId])
+
+}
+
+model Payment {
+  id             String        @id @default(uuid())
+  userId         String
+  eventId        String
+  amount         Float
+  paymentGateway String
+  status         PaymentStatus @default(PENDING)
+  transactionId  String?       @unique
+  user           User          @relation(fields: [userId], references: [id])
+  event          Event         @relation(fields: [eventId], references: [id])
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+ 
+}
+
+model Review {
+  id         String   @id @default(uuid())
+  eventId    String
+  userId     String
+  rating     Int
+  reviewText String?
+  event      Event    @relation(fields: [eventId], references: [id],onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id],onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([eventId, userId])
+ 
+}
