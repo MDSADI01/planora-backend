@@ -17,8 +17,6 @@ ALTER TYPE "ParticipantStatus" ADD VALUE 'BANNED';
 -- AlterTable
 ALTER TABLE "Event" ADD COLUMN     "eventCategory" "EventCategory" NOT NULL DEFAULT 'PUBLIC';
 
--- AlterTable
-ALTER TABLE "EventParticipant" ALTER COLUMN "status" SET DEFAULT 'PENDING';
 
 -- AlterTable
 ALTER TABLE "Review" ALTER COLUMN "rating" SET DATA TYPE DOUBLE PRECISION;

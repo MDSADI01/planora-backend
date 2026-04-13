@@ -4,7 +4,7 @@ import { EventType, EventCategory } from '../../generated/prisma/client';
 
 export const createEvent = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { title, description, date, time, venue, type, fee, eventCategory } = req.body;
+    const { title, description, date, time, venue, image, type, fee, eventCategory } = req.body;
     const userId = req.user!.userId;
 
     const event = await eventService.createEvent({
@@ -13,6 +13,7 @@ export const createEvent = async (req: Request, res: Response, next: NextFunctio
       date: new Date(date),
       time,
       venue,
+      image,
       type: type as EventType,
       fee: fee ? Number(fee) : 0,
       eventCategory: eventCategory as EventCategory,

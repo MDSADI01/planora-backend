@@ -7,6 +7,7 @@ export const createEvent = async (data: {
   date: Date;
   time: string;
   venue?: string;
+  image: string;
   type: EventType;
   fee?: number;
   eventCategory?: EventCategory;
