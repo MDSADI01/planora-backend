@@ -31,13 +31,14 @@ export const getEvents = async (req: Request, res: Response, next: NextFunction)
     const { eventCategory, type, search, isFree } = req.query;
 
     const filters = {
-      eventCategory: eventCategory !== undefined ? (eventCategory as EventCategory) : EventCategory.PUBLIC, // Default to public
+      eventCategory: eventCategory as EventCategory | undefined,
       type: type as EventType | undefined,
       searchTerm: search as string | undefined,
       isFree: isFree !== undefined ? isFree === 'true' : undefined,
     };
 
     const events = await eventService.getEvents(filters);
+    console.log(events);
     res.status(200).json({ success: true, data: events });
   } catch (error: any) {
     next(error);

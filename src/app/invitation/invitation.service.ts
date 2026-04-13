@@ -7,6 +7,17 @@ export const sendInvitation = async (eventId: string, hostId: string, inviteeId:
     throw new Error('Unauthorized or event not found');
   }
 
+  const invitee = await prisma.user.findUnique({ where: { id: inviteeId } });
+
+  if(!invitee){
+    throw new Error('Invitee not found');
+  }
+
+  if(invitee.id === hostId){
+    throw new Error('You cannot invite yourself');
+  }
+  
+
   const existingInvitation = await prisma.invitation.findUnique({
     where: { eventId_inviteeId: { eventId, inviteeId } }
   });

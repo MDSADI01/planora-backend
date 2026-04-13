@@ -8,7 +8,7 @@ export const initiatePayment = async (userId: string, eventId: string, amount: n
       userId,
       eventId,
       amount,
-      paymentGateway: 'mock-gateway',
+      paymentGateway: 'Stripe',
       status: PaymentStatus.PENDING,
       transactionId: crypto.randomUUID()
     }

@@ -24,26 +24,100 @@ export const getEvents = async (filters: {
   searchTerm?: string;
   isFree?: boolean;
 }) => {
+  const where: any = {};
+
+  // ✅ filter by category
+  if (filters.eventCategory) {
+    where.eventCategory = filters.eventCategory;
+  }
+
+  // ✅ filter by type
+  if (filters.type) {
+    where.type = filters.type;
+  }
+
+  // ✅ filter by free / paid
+  if (filters.isFree !== undefined) {
+    if (filters.isFree) {
+      // free events: fee = 0 OR fee = null
+      where.OR = [
+        { fee: 0 },
+        { fee: null },
+      ];
+    } else {
+      // paid events
+      where.fee = { gt: 0 };
+    }
+  }
+
+  // ✅ search filter
+  if (filters.searchTerm) {
+    const searchConditions = [
+      { title: { contains: filters.searchTerm, mode: 'insensitive' } },
+      { organizer: { name: { contains: filters.searchTerm, mode: 'insensitive' } } },
+    ];
+
+    if (where.OR) {
+      // 🔥 combine previous OR (fee) with search OR
+      where.AND = [
+        { OR: where.OR },
+        { OR: searchConditions },
+      ];
+      delete where.OR;
+    } else {
+      where.OR = searchConditions;
+    }
+  }
+
   return prisma.event.findMany({
-    where: {
-      eventCategory: filters.eventCategory,
-      type: filters.type,
-      ...(filters.isFree !== undefined && { fee: filters.isFree ? 0 : { gt: 0 } }),
-      ...(filters.searchTerm && {
-        OR: [
-          { title: { contains: filters.searchTerm, mode: 'insensitive' } },
-          { organizer: { name: { contains: filters.searchTerm, mode: 'insensitive' } } },
-        ],
-      }),
-    },
+    where, // ✅ if empty → returns ALL events
     include: {
-      organizer: { select: { id: true, name: true, image: true } },
+      organizer: {
+        select: { id: true, name: true, image: true },
+      },
     },
     orderBy: {
       date: 'asc',
     },
   });
 };
+
+// export const getEvents = async () => {
+//   return prisma.event.findMany({
+//     include: {
+//       organizer: true,
+//     },
+//   });
+// };
+
+
+
+// export const getEvents = async (filters: {
+//   eventCategory?: EventCategory;
+//   type?: EventType;
+//   searchTerm?: string;
+//   isFree?: boolean;
+// }) => {
+//   return prisma.event.findMany({
+//     where: {
+//       eventCategory: filters.eventCategory,
+//       type: filters.type,
+//       ...(filters.isFree !== undefined && { fee: filters.isFree ? 0 : { gt: 0 } }),
+//       ...(filters.searchTerm && {
+//         OR: [
+//           { title: { contains: filters.searchTerm, mode: 'insensitive' } },
+//           { organizer: { name: { contains: filters.searchTerm, mode: 'insensitive' } } },
+//         ],
+//       }),
+//     },
+//     include: {
+//       organizer: { select: { id: true, name: true, image: true } },
+//     },
+//     orderBy: {
+//       date: 'asc',
+//     },
+//   });
+// };
 
 export const getEventById = async (id: string) => {
   return prisma.event.findUnique({
