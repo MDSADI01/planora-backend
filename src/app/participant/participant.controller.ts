@@ -4,7 +4,9 @@ import { ParticipantStatus } from '../../generated/prisma/client';
 
 export const joinEvent = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const participant = await participantService.joinEvent(req.user!.userId, req.params.eventId as string);
+
+    const { eventId } = req.body;
+    const participant = await participantService.joinEvent(req.user!.userId, eventId);
     res.status(201).json({ success: true, data: participant });
   } catch (error: any) {
     if (error.message.includes('not found')) error.status = 404;

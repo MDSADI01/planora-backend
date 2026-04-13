@@ -9,6 +9,10 @@ export const joinEvent = async (userId: string, eventId: string) => {
     where: { userId_eventId: { userId, eventId } }
   });
 
+  if (event.organizerId === userId) {
+    throw new Error('Organizer cannot join their own event');
+  }
+
   if (existingParticipant) throw new Error('Already participated or requested');
 
   // If free and public, approve immediately. Otherwise pending.

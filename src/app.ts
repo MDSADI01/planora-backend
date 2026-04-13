@@ -21,8 +21,8 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/events', eventRoutes);
-app.use('/api/events/:eventId/participants', participantRoutes);
-app.use('/api/events/:eventId/reviews', reviewRoutes);
+app.use('/api/participants', participantRoutes);
+app.use('/api/reviews', reviewRoutes);
 app.use('/api/invitations', invitationRoutes);
 app.use('/api/payments', paymentRoutes);
 
