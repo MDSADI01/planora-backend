@@ -1,4 +1,4 @@
-import { EventType } from '../../generated/prisma/client';
+import { EventType, EventCategory } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
 
 export const createEvent = async (data: {
@@ -9,7 +9,7 @@ export const createEvent = async (data: {
   venue?: string;
   type: EventType;
   fee?: number;
-  isPrivate?: boolean;
+  eventCategory?: EventCategory;
   organizerId: string;
 }) => {
   return prisma.event.create({
@@ -18,14 +18,14 @@ export const createEvent = async (data: {
 };
 
 export const getEvents = async (filters: {
-  isPrivate?: boolean;
+  eventCategory?: EventCategory;
   type?: EventType;
   searchTerm?: string;
   isFree?: boolean;
 }) => {
   return prisma.event.findMany({
     where: {
-      isPrivate: filters.isPrivate,
+      eventCategory: filters.eventCategory,
       type: filters.type,
       ...(filters.isFree !== undefined && { fee: filters.isFree ? 0 : { gt: 0 } }),
       ...(filters.searchTerm && {

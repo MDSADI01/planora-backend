@@ -98,7 +98,7 @@ export const EventScalarFieldEnum = {
   venue: 'venue',
   type: 'type',
   fee: 'fee',
-  isPrivate: 'isPrivate',
+  eventCategory: 'eventCategory',
   organizerId: 'organizerId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

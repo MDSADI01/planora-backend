@@ -915,7 +915,7 @@ export const EventScalarFieldEnum = {
   venue: 'venue',
   type: 'type',
   fee: 'fee',
-  isPrivate: 'isPrivate',
+  eventCategory: 'eventCategory',
   organizerId: 'organizerId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1079,9 +1079,16 @@ export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMode
 
 
 /**
- * Reference to a field of type 'Boolean'
+ * Reference to a field of type 'EventCategory'
  */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+export type EnumEventCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EventCategory'>
+    
+
+
+/**
+ * Reference to a field of type 'EventCategory[]'
+ */
+export type ListEnumEventCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EventCategory[]'>
     
 
 

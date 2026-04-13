@@ -25,6 +25,14 @@ export const EventType = {
 export type EventType = (typeof EventType)[keyof typeof EventType]
 
 
+export const EventCategory = {
+  PUBLIC: 'PUBLIC',
+  PRIVATE: 'PRIVATE'
+} as const
+
+export type EventCategory = (typeof EventCategory)[keyof typeof EventCategory]
+
+
 export const ParticipantStatus = {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',

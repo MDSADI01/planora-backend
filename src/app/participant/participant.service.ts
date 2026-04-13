@@ -1,4 +1,4 @@
-import { ParticipantStatus, PaymentStatus } from '../../generated/prisma/client';
+import { ParticipantStatus, PaymentStatus, EventCategory } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
 
 export const joinEvent = async (userId: string, eventId: string) => {
@@ -12,7 +12,7 @@ export const joinEvent = async (userId: string, eventId: string) => {
   if (existingParticipant) throw new Error('Already participated or requested');
 
   // If free and public, approve immediately. Otherwise pending.
-  const isFreePublic = (event.fee === 0 && !event.isPrivate);
+  const isFreePublic = (event.fee === 0 && event.eventCategory === EventCategory.PUBLIC);
   const status = isFreePublic ? ParticipantStatus.APPROVED : ParticipantStatus.PENDING;
 
   return prisma.eventParticipant.create({

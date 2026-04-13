@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcrypt';
 import { generateToken } from './jwt.util';
 import { createUser, findUserByEmail } from './auth.service';
 
-export const register = async (req: Request, res: Response) => {
+export const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { name, email, password, image } = req.body;
 
@@ -29,14 +29,12 @@ export const register = async (req: Request, res: Response) => {
     });
 
   } catch (error: any) {
-    if (error.message === 'User already exists') {
-      return res.status(409).json({ message: error.message });
-    }
-    res.status(500).json({ message: 'Internal server error', error: error.message });
+    if (error.message === 'User already exists') error.status = 409;
+    next(error);
   }
 };
 
-export const login = async (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, password } = req.body;
 
@@ -71,6 +69,6 @@ export const login = async (req: Request, res: Response) => {
     });
 
   } catch (error: any) {
-    res.status(500).json({ message: 'Internal server error', error: error.message });
+    next(error);
   }
 };
