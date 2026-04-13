@@ -31,7 +31,7 @@ export const joinEvent = async (userId: string, eventId: string) => {
 
 export const updateParticipantStatus = async (
   eventId: string, 
-  userIdToUpdate: string, 
+  participantIdToUpdate: string, 
   status: ParticipantStatus, 
   hostId: string
 ) => {
@@ -40,8 +40,14 @@ export const updateParticipantStatus = async (
     throw new Error('Unauthorized or event not found');
   }
 
+  const participant = await prisma.eventParticipant.findUnique({
+    where: { id: participantIdToUpdate }
+  });
+
+  if (!participant) throw new Error('Participant not found');
+
   return prisma.eventParticipant.update({
-    where: { userId_eventId: { userId: userIdToUpdate, eventId } },
+    where: { id: participantIdToUpdate },
     data: { status }
   });
 };
