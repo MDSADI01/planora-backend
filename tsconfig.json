@@ -1,19 +1,23 @@
 {
   "compilerOptions": {
-    "module": "esnext",                                
+    "module": "esnext",
     "rootDir": "./src",
-    "outDir": "./dist",  
-    "moduleResolution": "bundler", 
+    "outDir": "./dist",
+    "moduleResolution": "bundler",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  "include": [
+    "src",
+    "src/app/seedAdmin"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }
-
-
 /*
 {
   "compilerOptions": {
@@ -25,4 +29,4 @@
     "ignoreDeprecations": "6.0"
   }
 }
-*/ 
+*/

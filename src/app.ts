@@ -1,4 +1,5 @@
 import express, { Application, Request, Response } from "express";
+import cookieParser from "cookie-parser";
 import authRoutes from "./app/auth/auth.routes";
 import eventRoutes from "./app/event/event.routes";
 import participantRoutes from "./app/participant/participant.routes";
@@ -16,6 +17,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // Middleware to parse JSON bodies
 app.use(express.json());
+
+// Middleware to parse cookies
+app.use(cookieParser());
 
 // API Routes
 app.use('/api/auth', authRoutes);

@@ -1,33 +1,42 @@
 import { InvitationStatus, PaymentStatus } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
 
-export const sendInvitation = async (eventId: string, hostId: string, inviteeId: string) => {
+export const sendInvitation = async (eventId: string, hostId: string, email: string) => {
   const event = await prisma.event.findUnique({ where: { id: eventId } });
+
   if (!event || event.organizerId !== hostId) {
     throw new Error('Unauthorized or event not found');
   }
 
-  const invitee = await prisma.user.findUnique({ where: { id: inviteeId } });
-
-  if(!invitee){
-    throw new Error('Invitee not found');
-  }
-
-  if(invitee.id === hostId){
-    throw new Error('You cannot invite yourself');
-  }
-  
-
-  const existingInvitation = await prisma.invitation.findUnique({
-    where: { eventId_inviteeId: { eventId, inviteeId } }
+  const invitee = await prisma.user.findUnique({
+    where: { email }
   });
 
-  if (existingInvitation) throw new Error('Invitation already sent');
+  if (!invitee) {
+    throw new Error('User with this email not found');
+  }
+
+  if (invitee.id === hostId) {
+    throw new Error('You cannot invite yourself');
+  }
+
+  const existingInvitation = await prisma.invitation.findUnique({
+    where: {
+      eventId_inviteeId: {
+        eventId,
+        inviteeId: invitee.id
+      }
+    }
+  });
+
+  if (existingInvitation) {
+    throw new Error('Invitation already sent');
+  }
 
   return prisma.invitation.create({
     data: {
       eventId,
-      inviteeId,
+      inviteeId: invitee.id
     }
   });
 };
@@ -38,6 +47,8 @@ export const getMyInvitations = async (userId: string) => {
     include: { event: { include: { organizer: { select: { id: true, name: true } } } } }
   });
 };
+
+
 
 export const updateInvitationStatus = async (invitationId: string, userId: string, status: InvitationStatus) => {
   const invitation = await prisma.invitation.findUnique({

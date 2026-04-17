@@ -1,9 +1,9 @@
-import { User } from "../../generated/prisma/client";
+import { User, Role } from "../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 import bcrypt from "bcrypt";
 
 
-export const createUser = async (name: string, email: string, password: string, image?: string): Promise<User> => {
+export const createUser = async (name: string, email: string, password: string, image?: string, role: Role = Role.USER): Promise<User> => {
   // Check if user exists
   const existingUser = await prisma.user.findUnique({
     where: { email },
@@ -23,6 +23,7 @@ export const createUser = async (name: string, email: string, password: string, 
       name,
       email,
       password: hashedPassword,
+      role,
       ...(image && { image }), // Only include image if it is provided
     },
   });

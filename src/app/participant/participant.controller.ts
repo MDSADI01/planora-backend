@@ -17,10 +17,9 @@ export const joinEvent = async (req: Request, res: Response, next: NextFunction)
 
 export const updateStatus = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { status, eventId } = req.body;
+    const { status } = req.body;
     const participantIdToUpdate =  req.params.id as string;
     const participant = await participantService.updateParticipantStatus(
-      eventId,
       participantIdToUpdate,
       status as ParticipantStatus,
       req.user!.userId

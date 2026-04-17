@@ -4,8 +4,8 @@ import { PaymentStatus } from '../../generated/prisma/client';
 
 export const initiatePayment = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { amount } = req.body;
-    const payment = await paymentService.initiatePayment(req.user!.userId, req.params.eventId as string, amount);
+    const { amount,eventId } = req.body;
+    const payment = await paymentService.initiatePayment(req.user!.userId, eventId , amount);
     
     // In a real scenario, you'd return the gateway URL to redirect the user
     res.status(201).json({ success: true, message: 'Payment initiated', data: payment });

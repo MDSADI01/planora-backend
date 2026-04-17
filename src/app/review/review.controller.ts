@@ -22,6 +22,17 @@ export const getReviews = async (req: Request, res: Response, next: NextFunction
   }
 };
 
+
+export const getMyReviews = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.user?.userId as string;
+    const reviews = await reviewService.getMyReviews(userId);
+    res.status(200).json({ success: true, data: reviews });
+  } catch (error: any) {
+    next(error);
+  }
+};
+
 export const updateReview = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { rating, reviewText } = req.body;
