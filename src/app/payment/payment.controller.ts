@@ -1,26 +1,75 @@
-import { Request, Response, NextFunction } from 'express';
-import * as paymentService from './payment.service';
-import { PaymentStatus } from '../../generated/prisma/client';
+ 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Request, Response } from "express";
+import { PaymentService } from "./payment.service";
+import { stripe } from "../stripe/stripe.config";
 
-export const initiatePayment = async (req: Request, res: Response, next: NextFunction) => {
+const handleStripeWebhookEvent = async (req : Request, res : Response) => {
+    const signature = req.headers['stripe-signature'] as string
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+    console.log("Webhook hit. Body type:", typeof req.body, "| Is Buffer:", Buffer.isBuffer(req.body));
+  console.log("Signature present:", !!signature);
+  console.log("Webhook secret present:", !!webhookSecret);
+
+    if(!signature || !webhookSecret){
+        console.error("Missing Stripe signature or webhook secret");
+        return res.status(400).json({message : "Missing Stripe signature or webhook secret"})
+    }
+
+    let event;
+
+    try {
+        event = stripe.webhooks.constructEvent(req.body, signature, webhookSecret);
+    } catch (error : any) {
+        console.error("Error processing Stripe webhook:", error);
+        return res.status(400).json({message : "Error processing Stripe webhook"})
+    }
+
+    try {
+        const result = await PaymentService.handlerStripeWebhookEvent(event);
+
+       return res.status(200).json({
+      success: true,
+      message: "Stripe webhook event processed successfully",
+      data: result,
+    });
+    } catch (error) {
+        console.error("Error handling Stripe webhook event:", error);
+        return res.status(500).json({message : "Error handling Stripe webhook event"})
+    }
+}
+
+
+export const initiateEventPaymentController = async (
+  req: Request,
+  res: Response
+) => {
   try {
-    const { amount,eventId } = req.body;
-    const payment = await paymentService.initiatePayment(req.user!.userId, eventId , amount);
-    
-    // In a real scenario, you'd return the gateway URL to redirect the user
-    res.status(201).json({ success: true, message: 'Payment initiated', data: payment });
+    const userId = req.user?.userId; // from auth middleware
+    const { eventId } = req.body;
+
+    if (!eventId) {
+      return res.status(400).json({
+        success: false,
+        message: "eventId is required",
+      });
+    }
+
+    const result = await PaymentService.initiateEventPayment(eventId, userId as string);
+
+    return res.status(200).json({
+      success: true,
+      message: "Payment session created",
+      data: result,
+    });
   } catch (error: any) {
-    next(error);
+    return res.status(400).json({
+      success: false,
+      message: error.message || "Something went wrong",
+    });
   }
 };
 
-export const paymentWebhook = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { transactionId, status } = req.body;
-    const payment = await paymentService.handlePaymentCallback(transactionId, status as PaymentStatus);
-    res.status(200).json({ success: true, data: payment });
-  } catch (error: any) {
-    error.status = 400;
-    next(error);
-  }
-};
+export const PaymentController = {
+    handleStripeWebhookEvent,initiateEventPaymentController
+}

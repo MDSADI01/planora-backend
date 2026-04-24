@@ -4,7 +4,7 @@ import { authorization } from '../middleware/auth.middleware';
 
 const router = Router({ mergeParams: true });
 
-router.get('/', reviewController.getReviews);
+router.get('/:eventId', reviewController.getReviews);
 router.get('/myReviews', authorization(), reviewController.getMyReviews);
 router.post('/:eventId', authorization(), reviewController.addReview);
 router.put('/:reviewId', authorization(), reviewController.updateReview);

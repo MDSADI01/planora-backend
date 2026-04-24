@@ -130,6 +130,7 @@ model Payment {
   eventId        String
   amount         Float
   paymentGateway String
+  stripeEventId  String?       @unique
   status         PaymentStatus @default(PENDING)
   transactionId  String?       @unique
   user           User          @relation(fields: [userId], references: [id])

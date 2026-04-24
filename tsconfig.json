@@ -11,7 +11,7 @@
   },
   "include": [
     "src",
-    "src/app/seedAdmin"
+    "src/seedAdmin"
   ],
   "exclude": [
     "node_modules",

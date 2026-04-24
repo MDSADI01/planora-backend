@@ -8,9 +8,14 @@ import paymentRoutes from "./app/payment/payment.routes";
 import reviewRoutes from "./app/review/review.routes";
 import adminRoutes from "./app/admin/admin.routes";
 import { globalErrorHandler } from "./app/middleware/error.middleware";
+import { PaymentController } from "./app/payment/payment.controller";
 
 const app: Application = express();
 export const port = process.env.PORT || 8000;
+
+// Payment routes (includes /webhook with raw body parser for Stripe signature verification)
+
+app.post("/webhook", express.raw({ type: "*/*" }), PaymentController.handleStripeWebhookEvent)
 
 // Enable URL-encoded form data parsing
 app.use(express.urlencoded({ extended: true }));
@@ -29,6 +34,7 @@ app.use('/api/participants', participantRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/invitations', invitationRoutes);
 app.use('/api/payments', paymentRoutes);
+
 
 // Basic route
 app.get('/', (req: Request, res: Response) => {

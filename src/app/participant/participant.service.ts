@@ -1,31 +1,45 @@
-import { ParticipantStatus, PaymentStatus, EventCategory } from '../../generated/prisma/client';
+import { ParticipantStatus, PaymentStatus } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
 
 export const joinEvent = async (userId: string, eventId: string) => {
   const event = await prisma.event.findUnique({ where: { id: eventId } });
-  if (!event) throw new Error('Event not found');
 
-  const existingParticipant = await prisma.eventParticipant.findUnique({
-    where: { userId_eventId: { userId, eventId } }
-  });
+  if (!event) throw new Error("Event not found");
 
   if (event.organizerId === userId) {
-    throw new Error('Organizer cannot join their own event');
+    throw new Error("Organizer cannot join their own event");
   }
 
-  if (existingParticipant) throw new Error('Already participated or requested');
+  const existingParticipant = await prisma.eventParticipant.findUnique({
+    where: { userId_eventId: { userId, eventId } },
+  });
 
-  // If free and public, approve immediately. Otherwise pending.
-  const isFreePublic = (event.fee === 0 && event.eventCategory === EventCategory.PUBLIC);
-  const status = isFreePublic ? ParticipantStatus.APPROVED : ParticipantStatus.PENDING;
+  if (existingParticipant) {
+    return existingParticipant;
+  }
 
+  const isFree = event.fee === 0;
+
+  // ✅ FREE EVENT
+  if (isFree) {
+    return prisma.eventParticipant.create({
+      data: {
+        userId,
+        eventId,
+        status: ParticipantStatus.REGISTERED, // directly confirmed
+        paymentStatus: PaymentStatus.SUCCESS,
+      },
+    });
+  }
+
+  // 💳 PAID EVENT
   return prisma.eventParticipant.create({
     data: {
       userId,
       eventId,
-      status,
-      paymentStatus: isFreePublic ? PaymentStatus.SUCCESS : PaymentStatus.PENDING
-    }
+      status: ParticipantStatus.PENDING, // waiting for payment
+      paymentStatus: PaymentStatus.PENDING,
+    },
   });
 };
 
@@ -36,11 +50,19 @@ export const updateParticipantStatus = async (
   hostId: string
 ) => {
 
-  const participant = await prisma.eventParticipant.findUnique({
-    where: { id: participantIdToUpdate }
+  const participant = await prisma.eventParticipant.findFirst({
+    where: {
+      id: participantIdToUpdate,
+      event: {
+        organizerId: hostId
+      }
+    }
   });
 
-  if (!participant) throw new Error('Participant not found');
+  if (!participant) {
+    throw new Error("Unauthorized or participant not found");
+  }
+
 
   return prisma.eventParticipant.update({
     where: { id: participantIdToUpdate },
