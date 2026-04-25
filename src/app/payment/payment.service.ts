@@ -16,7 +16,6 @@ if (!FRONTEND_URL) {
  * =========================================
  */
 const handlerStripeWebhookEvent = async (event: Stripe.Event) => {
-  console.log("Got the webHook");
   // ✅ prevent duplicate webhook processing
   const existing = await prisma.payment.findFirst({
     where: {
@@ -25,7 +24,6 @@ const handlerStripeWebhookEvent = async (event: Stripe.Event) => {
   });
 
   if (existing) {
-    console.log(`Event ${event.id} already processed`);
     return;
   }
 
@@ -43,10 +41,7 @@ const handlerStripeWebhookEvent = async (event: Stripe.Event) => {
       const paymentId = session.metadata?.paymentId;
 
       if (!eventId || !userId || !paymentId) {
-        console.error("Missing metadata in Stripe session");
-        console.error("❌ Missing metadata:", { eventId, userId, paymentId });
-        console.error("Full session metadata:", session.metadata);
-        return;
+        throw new Error("Missing metadata in Stripe checkout session");
       }
 
       const paymentIntentId = session.payment_intent as string;
@@ -86,7 +81,6 @@ const handlerStripeWebhookEvent = async (event: Stripe.Event) => {
         });
       });
 
-      console.log(`Payment SUCCESS for user ${userId}, event ${eventId}`);
       break;
     }
 
@@ -120,7 +114,6 @@ const handlerStripeWebhookEvent = async (event: Stripe.Event) => {
         });
       }
 
-      console.log(`Payment FAILED: ${paymentIntent.id}`);
       break;
     }
 
@@ -153,12 +146,11 @@ const handlerStripeWebhookEvent = async (event: Stripe.Event) => {
         });
       }
 
-      console.log(`Session expired: ${session.id}`);
       break;
     }
 
     default:
-      console.log(`Unhandled event: ${event.type}`);
+      break;
   }
 
   return { message: "Webhook processed" };
@@ -258,9 +250,6 @@ const initiateEventPayment = async (eventId: string, userId: string) => {
     success_url: `${FRONTEND_URL}/payment-success`,
     cancel_url: `${FRONTEND_URL}/payment-cancel`,
   });
-
-  console.log(session.id);
-  console.log("Metadata set:", { eventId, userId, paymentId: payment.id });
 
   return {
     paymentUrl: session.url,

@@ -14,17 +14,27 @@ async function seedAdmin() {
   try {
     const existingAdmin = await findUserByEmail(adminEmail);
     if (existingAdmin) {
-      console.log(`Admin with email ${adminEmail} already exists.`);
+      `Admin with email ${adminEmail} already exists.`;
       process.exit(0);
     }
 
-    const admin = await createUser(adminName, adminEmail, adminPassword, adminImage, Role.ADMIN);
-    console.log(`Admin created successfully: ${admin.email}`);
-    console.log(`Role: ${admin.role}`);
+    const admin = await createUser(
+      adminName,
+      adminEmail,
+      adminPassword,
+      adminImage,
+      Role.ADMIN
+    );
+    `Admin created successfully: ${admin.email}`;
+    `Role: ${admin.role}`;
     process.exit(0);
   } catch (error) {
-    console.error("Error seeding admin:", error);
-    process.exit(1);
+    process.exitCode = 1;
+    throw new Error(
+      `Error seeding admin: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`
+    );
   } finally {
     await prisma.$disconnect();
   }
