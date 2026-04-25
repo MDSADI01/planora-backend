@@ -13,9 +13,8 @@ import { PaymentController } from "./app/payment/payment.controller";
 const app: Application = express();
 export const port = process.env.PORT || 8000;
 
-// Payment routes (includes /webhook with raw body parser for Stripe signature verification)
-
-app.post("/webhook", express.raw({ type: "*/*" }), PaymentController.handleStripeWebhookEvent)
+// Stripe webhooks must use raw body before JSON middleware.
+app.post("/webhook", express.raw({ type: "application/json" }), PaymentController.handleStripeWebhookEvent);
 
 // Enable URL-encoded form data parsing
 app.use(express.urlencoded({ extended: true }));

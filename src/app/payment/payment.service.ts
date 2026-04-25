@@ -97,16 +97,28 @@ const handlerStripeWebhookEvent = async (event: Stripe.Event) => {
      */
     case "payment_intent.payment_failed": {
       const paymentIntent = event.data.object as Stripe.PaymentIntent;
+      const paymentId = paymentIntent.metadata?.paymentId;
 
-      await prisma.payment.updateMany({
-        where: {
-          transactionId: paymentIntent.id,
-        },
-        data: {
-          status: PaymentStatus.FAILED,
-          stripeEventId: event.id,
-        },
-      });
+      if (paymentId) {
+        await prisma.payment.update({
+          where: { id: paymentId },
+          data: {
+            status: PaymentStatus.FAILED,
+            stripeEventId: event.id,
+            transactionId: paymentIntent.id,
+          },
+        });
+      } else {
+        await prisma.payment.updateMany({
+          where: {
+            transactionId: paymentIntent.id,
+          },
+          data: {
+            status: PaymentStatus.FAILED,
+            stripeEventId: event.id,
+          },
+        });
+      }
 
       console.log(`Payment FAILED: ${paymentIntent.id}`);
       break;
@@ -119,16 +131,27 @@ const handlerStripeWebhookEvent = async (event: Stripe.Event) => {
      */
     case "checkout.session.expired": {
       const session = event.data.object as Stripe.Checkout.Session;
+      const paymentId = session.metadata?.paymentId;
 
-      await prisma.payment.updateMany({
-        where: {
-          transactionId: session.payment_intent as string,
-        },
-        data: {
-          status: PaymentStatus.FAILED,
-          stripeEventId: event.id,
-        },
-      });
+      if (paymentId) {
+        await prisma.payment.update({
+          where: { id: paymentId },
+          data: {
+            status: PaymentStatus.FAILED,
+            stripeEventId: event.id,
+          },
+        });
+      } else {
+        await prisma.payment.updateMany({
+          where: {
+            transactionId: session.payment_intent as string,
+          },
+          data: {
+            status: PaymentStatus.FAILED,
+            stripeEventId: event.id,
+          },
+        });
+      }
 
       console.log(`Session expired: ${session.id}`);
       break;
@@ -224,6 +247,13 @@ const initiateEventPayment = async (eventId: string, userId: string) => {
       eventId,
       userId,
       paymentId: payment.id,
+    },
+    payment_intent_data: {
+      metadata: {
+        eventId,
+        userId,
+        paymentId: payment.id,
+      },
     },
     success_url: `${FRONTEND_URL}/payment-success`,
     cancel_url: `${FRONTEND_URL}/payment-cancel`,
