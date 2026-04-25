@@ -8,7 +8,7 @@ export const joinEvent = async (req: Request, res: Response, next: NextFunction)
     const { eventId } = req.body;
     const participant = await participantService.joinEvent(req.user!.userId, eventId);
     res.status(201).json({ success: true, data: participant });
-  } catch (error: any) {
+  } catch (error: any ) {
     if (error.message.includes('not found')) error.status = 404;
     else error.status = 400;
     next(error);
