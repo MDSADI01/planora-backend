@@ -1,10 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import { Prisma } from '../../generated/prisma/client';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const globalErrorHandler = (
   err: any,
   req: Request,
   res: Response,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next: NextFunction
 ) => {
   let statusCode = err.status || 500;

@@ -29,7 +29,7 @@ export const addReview = async (userId: string, eventId: string, rating: number,
       userId,
       eventId,
       rating,
-      reviewText
+      reviewText: reviewText ?? null
     }
   });
 };

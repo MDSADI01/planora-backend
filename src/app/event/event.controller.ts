@@ -35,7 +35,8 @@ export const createEvent = async (
     });
 
     res.status(201).json({ success: true, data: event });
-  } catch (error: any) {
+  } catch (err) {
+    const error = err as any;
     next(error);
   }
 };
@@ -48,17 +49,22 @@ export const getEvents = async (
   try {
     const { eventCategory, type, search, isFree } = req.query;
 
-    const filters = {
-      eventCategory: eventCategory as EventCategory | undefined,
-      type: type as EventType | undefined,
-      searchTerm: search as string | undefined,
-      isFree: isFree !== undefined ? isFree === "true" : undefined,
-    };
+    const filters: {
+      eventCategory?: EventCategory;
+      type?: EventType;
+      searchTerm?: string;
+      isFree?: boolean;
+    } = {};
+
+    if (eventCategory) filters.eventCategory = eventCategory as EventCategory;
+    if (type) filters.type = type as EventType;
+    if (search) filters.searchTerm = search as string;
+    if (isFree !== undefined) filters.isFree = isFree === "true";
 
     const events = await eventService.getEvents(filters);
-    events;
     res.status(200).json({ success: true, data: events });
-  } catch (error: any) {
+  } catch (err) {
+    const error = err as any;
     next(error);
   }
 };
@@ -75,7 +81,8 @@ export const getEventById = async (
         .status(404)
         .json({ success: false, message: "Event not found" });
     res.status(200).json({ success: true, data: event });
-  } catch (error: any) {
+  } catch (err) {
+    const error = err as any;
     next(error);
   }
 };
@@ -92,8 +99,9 @@ export const updateEvent = async (
       req.body
     );
     res.status(200).json({ success: true, data: event });
-  } catch (error: any) {
-    if (error.message.includes("Unauthorized")) error.status = 403;
+  } catch (err) {
+    const error = err as any;
+    if (error.message?.includes("Unauthorized")) error.status = 403;
     next(error);
   }
 };
@@ -112,8 +120,9 @@ export const deleteEvent = async (
     res
       .status(200)
       .json({ success: true, message: "Event deleted successfully" });
-  } catch (error: any) {
-    if (error.message.includes("Unauthorized")) error.status = 403;
+  } catch (err) {
+    const error = err as any;
+    if (error.message?.includes("Unauthorized")) error.status = 403;
     next(error);
   }
 };

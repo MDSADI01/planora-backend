@@ -1,0 +1,12 @@
+﻿src/app/event/event.controller.ts(58,49): error TS2379: Argument of type '{ eventCategory: EventCategory | undefined; type: EventType | undefined; searchTerm: string | undefined; isFree: boolean | undefined; }' is not assignable to parameter of type '{ eventCategory?: EventCategory; type?: EventType; searchTerm?: string; isFree?: boolean; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'eventCategory' are incompatible.
+    Type 'EventCategory | undefined' is not assignable to type 'EventCategory'.
+      Type 'undefined' is not assignable to type 'EventCategory'.
+src/app/middleware/auth.middleware.ts(30,35): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/app/review/review.service.ts(28,5): error TS2375: Type '{ userId: string; eventId: string; rating: number; reviewText: string | undefined; }' is not assignable to type '(Without<ReviewCreateInput, ReviewUncheckedCreateInput> & ReviewUncheckedCreateInput) | (Without<...> & ReviewCreateInput)' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Type '{ userId: string; eventId: string; rating: number; reviewText: string | undefined; }' is not assignable to type 'Without<ReviewCreateInput, ReviewUncheckedCreateInput> & ReviewUncheckedCreateInput' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+    Type '{ userId: string; eventId: string; rating: number; reviewText: string | undefined; }' is not assignable to type 'ReviewUncheckedCreateInput' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+      Types of property 'reviewText' are incompatible.
+        Type 'string | undefined' is not assignable to type 'string | null'.
+          Type 'undefined' is not assignable to type 'string | null'.
