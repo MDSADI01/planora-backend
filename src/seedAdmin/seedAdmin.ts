@@ -5,38 +5,44 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+interface AdminConfig {
+  email: string;
+  password: string;
+  name: string;
+  image?: string;
+}
+
 async function seedAdmin() {
-  const adminEmail = process.env.ADMIN_EMAIL as string;
-  const adminPassword = process.env.ADMIN_PASSWORD as string;
-  const adminName = process.env.ADMIN_NAME as string;
-  const adminImage = process.env.ADMIN_IMAGE as string;
+  const adminConfig: AdminConfig = {
+    email: process.env.ADMIN_EMAIL as string,
+    password: process.env.ADMIN_PASSWORD as string,
+    name: process.env.ADMIN_NAME as string,
+    image: process.env.ADMIN_IMAGE as string,
+  };
 
   try {
-    const existingAdmin = await findUserByEmail(adminEmail);
+    const existingAdmin = await findUserByEmail(adminConfig.email);
     if (existingAdmin) {
-      `Admin with email ${adminEmail} already exists.`;
-      process.exit(0);
+      console.log("Admin user already exists");
+      return;
     }
 
     const admin = await createUser(
-      adminName,
-      adminEmail,
-      adminPassword,
-      adminImage,
+      adminConfig.name,
+      adminConfig.email,
+      adminConfig.password,
+      adminConfig.image,
       Role.ADMIN
     );
-    `Admin created successfully: ${admin.email}`;
-    `Role: ${admin.role}`;
-    process.exit(0);
-  } catch (error) {
+    console.log("Admin user created successfully");
+  } catch (err) {
     process.exitCode = 1;
-    throw new Error(
-      `Error seeding admin: ${
-        error instanceof Error ? error.message : "Unknown error"
-      }`
-    );
+    console.error("Error seeding admin user:", err);
   } finally {
     await prisma.$disconnect();
+    if (process.exitCode === 1) {
+      process.exit(1);
+    }
   }
 }
 
