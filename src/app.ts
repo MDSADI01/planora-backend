@@ -9,12 +9,20 @@ import reviewRoutes from "./app/review/review.routes";
 import adminRoutes from "./app/admin/admin.routes";
 import { globalErrorHandler } from "./app/middleware/error.middleware";
 import { PaymentController } from "./app/payment/payment.controller";
+import cors from "cors";
 
 const app: Application = express();
 export const port = process.env.PORT || 8000;
 
 // Stripe webhooks must use raw body before JSON middleware.
 app.post("/webhook", express.raw({ type: "application/json" }), PaymentController.handleStripeWebhookEvent);
+
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL, // your frontend URL
+    credentials: true, // needed for cookies/JWT
+  })
+);
 
 // Enable URL-encoded form data parsing
 app.use(express.urlencoded({ extended: true }));
