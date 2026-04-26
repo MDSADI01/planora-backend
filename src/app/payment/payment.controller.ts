@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from "express";
 import { PaymentService } from "./payment.service";
-import { STRIPE_WEBHOOK_SECRET, stripe } from "../stripe/stripe.config";
+import { getStripe, getStripeWebhookSecret } from "../stripe/stripe.config";
 import Stripe from "stripe";
 
 const handleStripeWebhookEvent = async (req: Request, res: Response) => {
   try {
     const signature = req.headers["stripe-signature"] as string;
-    const webhookSecret = STRIPE_WEBHOOK_SECRET;
+    const webhookSecret = getStripeWebhookSecret();
+    const stripe = getStripe();
 
     if (!signature || !webhookSecret) {
       const error = new Error("Missing Stripe signature or webhook secret");

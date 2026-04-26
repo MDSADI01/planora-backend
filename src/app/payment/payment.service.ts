@@ -2,13 +2,15 @@
 import Stripe from "stripe";
 import { prisma } from "../../lib/prisma";
 import { PaymentStatus, ParticipantStatus } from "../../generated/prisma/enums";
-import { stripe } from "../stripe/stripe.config";
+import { getStripe } from "../stripe/stripe.config";
 
-const FRONTEND_URL = process.env.FRONTEND_URL;
-
-if (!FRONTEND_URL) {
-  throw new Error("FRONTEND_URL is not defined in environment variables");
-}
+const getFrontendUrl = () => {
+  const frontendUrl = process.env.FRONTEND_URL;
+  if (!frontendUrl) {
+    throw new Error("FRONTEND_URL is not defined in environment variables");
+  }
+  return frontendUrl;
+};
 
 /**
  * =========================================
@@ -162,6 +164,9 @@ const handlerStripeWebhookEvent = async (event: Stripe.Event) => {
  * =========================================
  */
 const initiateEventPayment = async (eventId: string, userId: string) => {
+  const FRONTEND_URL = getFrontendUrl();
+  const stripe = getStripe();
+
   // 1. Find event
   const event = await prisma.event.findUnique({
     where: { id: eventId },

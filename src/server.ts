@@ -12,12 +12,9 @@ const serverFunction = async () => {
       console.log(`Server is running on http://localhost:${PORT}`);
     });
   } catch (err) {
+    console.error("An error occurred", err);
     await prisma.$disconnect();
-    throw new Error(
-      `An error occurred while starting server: ${
-        err instanceof Error ? err.message : "Unknown error"
-      }`
-    );
+    process.exit(1);
   }
 };
 
