@@ -18,10 +18,23 @@ export const joinEvent = async (userId: string, eventId: string) => {
     return existingParticipant;
   }
 
-  const isFree = event.fee === 0;
+  const isPrivateEvent = event.eventCategory === "PRIVATE";
+  const requiresPayment = event.eventCategory === "PUBLIC" && event.fee > 0;
 
-  // ✅ FREE EVENT
-  if (isFree) {
+  // 🔐 PRIVATE EVENT: wait for organizer approval
+  if (isPrivateEvent) {
+    return prisma.eventParticipant.create({
+      data: {
+        userId,
+        eventId,
+        status: ParticipantStatus.PENDING,
+        paymentStatus: event.fee > 0 ? PaymentStatus.PENDING : PaymentStatus.SUCCESS,
+      },
+    });
+  }
+
+  // ✅ FREE PUBLIC EVENT
+  if (!requiresPayment) {
     return prisma.eventParticipant.create({
       data: {
         userId,
@@ -32,7 +45,7 @@ export const joinEvent = async (userId: string, eventId: string) => {
     });
   }
 
-  // 💳 PAID EVENT
+  // 💳 PAID PUBLIC EVENT
   return prisma.eventParticipant.create({
     data: {
       userId,

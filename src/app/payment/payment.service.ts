@@ -189,8 +189,16 @@ const initiateEventPayment = async (eventId: string, userId: string) => {
     throw new Error("Join event before payment");
   }
 
-  // 3. Prevent duplicate payment
-  if (participant.paymentStatus === PaymentStatus.SUCCESS) {
+  // 3. Prevent duplicate payment using the payment source of truth
+  const existingSuccess = await prisma.payment.findFirst({
+    where: {
+      userId,
+      eventId,
+      status: PaymentStatus.SUCCESS,
+    },
+  });
+
+  if (existingSuccess) {
     throw new Error("Payment already completed");
   }
 
