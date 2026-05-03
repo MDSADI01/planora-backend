@@ -45,6 +45,7 @@ export type EventMinAggregateOutputType = {
   fee: number | null
   image: string | null
   eventCategory: $Enums.EventCategory | null
+  eventTheme: $Enums.EventTheme | null
   organizerId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -61,6 +62,7 @@ export type EventMaxAggregateOutputType = {
   fee: number | null
   image: string | null
   eventCategory: $Enums.EventCategory | null
+  eventTheme: $Enums.EventTheme | null
   organizerId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -77,6 +79,7 @@ export type EventCountAggregateOutputType = {
   fee: number
   image: number
   eventCategory: number
+  eventTheme: number
   organizerId: number
   createdAt: number
   updatedAt: number
@@ -103,6 +106,7 @@ export type EventMinAggregateInputType = {
   fee?: true
   image?: true
   eventCategory?: true
+  eventTheme?: true
   organizerId?: true
   createdAt?: true
   updatedAt?: true
@@ -119,6 +123,7 @@ export type EventMaxAggregateInputType = {
   fee?: true
   image?: true
   eventCategory?: true
+  eventTheme?: true
   organizerId?: true
   createdAt?: true
   updatedAt?: true
@@ -135,6 +140,7 @@ export type EventCountAggregateInputType = {
   fee?: true
   image?: true
   eventCategory?: true
+  eventTheme?: true
   organizerId?: true
   createdAt?: true
   updatedAt?: true
@@ -238,6 +244,7 @@ export type EventGroupByOutputType = {
   fee: number
   image: string
   eventCategory: $Enums.EventCategory
+  eventTheme: $Enums.EventTheme
   organizerId: string
   createdAt: Date
   updatedAt: Date
@@ -277,6 +284,7 @@ export type EventWhereInput = {
   fee?: Prisma.FloatFilter<"Event"> | number
   image?: Prisma.StringFilter<"Event"> | string
   eventCategory?: Prisma.EnumEventCategoryFilter<"Event"> | $Enums.EventCategory
+  eventTheme?: Prisma.EnumEventThemeFilter<"Event"> | $Enums.EventTheme
   organizerId?: Prisma.StringFilter<"Event"> | string
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
@@ -298,6 +306,7 @@ export type EventOrderByWithRelationInput = {
   fee?: Prisma.SortOrder
   image?: Prisma.SortOrder
   eventCategory?: Prisma.SortOrder
+  eventTheme?: Prisma.SortOrder
   organizerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -322,6 +331,7 @@ export type EventWhereUniqueInput = Prisma.AtLeast<{
   fee?: Prisma.FloatFilter<"Event"> | number
   image?: Prisma.StringFilter<"Event"> | string
   eventCategory?: Prisma.EnumEventCategoryFilter<"Event"> | $Enums.EventCategory
+  eventTheme?: Prisma.EnumEventThemeFilter<"Event"> | $Enums.EventTheme
   organizerId?: Prisma.StringFilter<"Event"> | string
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
@@ -343,6 +353,7 @@ export type EventOrderByWithAggregationInput = {
   fee?: Prisma.SortOrder
   image?: Prisma.SortOrder
   eventCategory?: Prisma.SortOrder
+  eventTheme?: Prisma.SortOrder
   organizerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -367,6 +378,7 @@ export type EventScalarWhereWithAggregatesInput = {
   fee?: Prisma.FloatWithAggregatesFilter<"Event"> | number
   image?: Prisma.StringWithAggregatesFilter<"Event"> | string
   eventCategory?: Prisma.EnumEventCategoryWithAggregatesFilter<"Event"> | $Enums.EventCategory
+  eventTheme?: Prisma.EnumEventThemeWithAggregatesFilter<"Event"> | $Enums.EventTheme
   organizerId?: Prisma.StringWithAggregatesFilter<"Event"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Event"> | Date | string
@@ -383,6 +395,7 @@ export type EventCreateInput = {
   fee?: number
   image: string
   eventCategory?: $Enums.EventCategory
+  eventTheme?: $Enums.EventTheme
   createdAt?: Date | string
   updatedAt?: Date | string
   organizer: Prisma.UserCreateNestedOneWithoutOrganizedEventsInput
@@ -403,6 +416,7 @@ export type EventUncheckedCreateInput = {
   fee?: number
   image: string
   eventCategory?: $Enums.EventCategory
+  eventTheme?: $Enums.EventTheme
   organizerId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -423,6 +437,7 @@ export type EventUpdateInput = {
   fee?: Prisma.FloatFieldUpdateOperationsInput | number
   image?: Prisma.StringFieldUpdateOperationsInput | string
   eventCategory?: Prisma.EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+  eventTheme?: Prisma.EnumEventThemeFieldUpdateOperationsInput | $Enums.EventTheme
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizer?: Prisma.UserUpdateOneRequiredWithoutOrganizedEventsNestedInput
@@ -443,6 +458,7 @@ export type EventUncheckedUpdateInput = {
   fee?: Prisma.FloatFieldUpdateOperationsInput | number
   image?: Prisma.StringFieldUpdateOperationsInput | string
   eventCategory?: Prisma.EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+  eventTheme?: Prisma.EnumEventThemeFieldUpdateOperationsInput | $Enums.EventTheme
   organizerId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -463,6 +479,7 @@ export type EventCreateManyInput = {
   fee?: number
   image: string
   eventCategory?: $Enums.EventCategory
+  eventTheme?: $Enums.EventTheme
   organizerId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -479,6 +496,7 @@ export type EventUpdateManyMutationInput = {
   fee?: Prisma.FloatFieldUpdateOperationsInput | number
   image?: Prisma.StringFieldUpdateOperationsInput | string
   eventCategory?: Prisma.EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+  eventTheme?: Prisma.EnumEventThemeFieldUpdateOperationsInput | $Enums.EventTheme
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -494,6 +512,7 @@ export type EventUncheckedUpdateManyInput = {
   fee?: Prisma.FloatFieldUpdateOperationsInput | number
   image?: Prisma.StringFieldUpdateOperationsInput | string
   eventCategory?: Prisma.EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+  eventTheme?: Prisma.EnumEventThemeFieldUpdateOperationsInput | $Enums.EventTheme
   organizerId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -520,6 +539,7 @@ export type EventCountOrderByAggregateInput = {
   fee?: Prisma.SortOrder
   image?: Prisma.SortOrder
   eventCategory?: Prisma.SortOrder
+  eventTheme?: Prisma.SortOrder
   organizerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -540,6 +560,7 @@ export type EventMaxOrderByAggregateInput = {
   fee?: Prisma.SortOrder
   image?: Prisma.SortOrder
   eventCategory?: Prisma.SortOrder
+  eventTheme?: Prisma.SortOrder
   organizerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -556,6 +577,7 @@ export type EventMinOrderByAggregateInput = {
   fee?: Prisma.SortOrder
   image?: Prisma.SortOrder
   eventCategory?: Prisma.SortOrder
+  eventTheme?: Prisma.SortOrder
   organizerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -628,6 +650,10 @@ export type EnumEventCategoryFieldUpdateOperationsInput = {
   set?: $Enums.EventCategory
 }
 
+export type EnumEventThemeFieldUpdateOperationsInput = {
+  set?: $Enums.EventTheme
+}
+
 export type EventCreateNestedOneWithoutParticipantsInput = {
   create?: Prisma.XOR<Prisma.EventCreateWithoutParticipantsInput, Prisma.EventUncheckedCreateWithoutParticipantsInput>
   connectOrCreate?: Prisma.EventCreateOrConnectWithoutParticipantsInput
@@ -695,6 +721,7 @@ export type EventCreateWithoutOrganizerInput = {
   fee?: number
   image: string
   eventCategory?: $Enums.EventCategory
+  eventTheme?: $Enums.EventTheme
   createdAt?: Date | string
   updatedAt?: Date | string
   participants?: Prisma.EventParticipantCreateNestedManyWithoutEventInput
@@ -714,6 +741,7 @@ export type EventUncheckedCreateWithoutOrganizerInput = {
   fee?: number
   image: string
   eventCategory?: $Enums.EventCategory
+  eventTheme?: $Enums.EventTheme
   createdAt?: Date | string
   updatedAt?: Date | string
   participants?: Prisma.EventParticipantUncheckedCreateNestedManyWithoutEventInput
@@ -762,6 +790,7 @@ export type EventScalarWhereInput = {
   fee?: Prisma.FloatFilter<"Event"> | number
   image?: Prisma.StringFilter<"Event"> | string
   eventCategory?: Prisma.EnumEventCategoryFilter<"Event"> | $Enums.EventCategory
+  eventTheme?: Prisma.EnumEventThemeFilter<"Event"> | $Enums.EventTheme
   organizerId?: Prisma.StringFilter<"Event"> | string
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
@@ -778,6 +807,7 @@ export type EventCreateWithoutParticipantsInput = {
   fee?: number
   image: string
   eventCategory?: $Enums.EventCategory
+  eventTheme?: $Enums.EventTheme
   createdAt?: Date | string
   updatedAt?: Date | string
   organizer: Prisma.UserCreateNestedOneWithoutOrganizedEventsInput
@@ -797,6 +827,7 @@ export type EventUncheckedCreateWithoutParticipantsInput = {
   fee?: number
   image: string
   eventCategory?: $Enums.EventCategory
+  eventTheme?: $Enums.EventTheme
   organizerId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -832,6 +863,7 @@ export type EventUpdateWithoutParticipantsInput = {
   fee?: Prisma.FloatFieldUpdateOperationsInput | number
   image?: Prisma.StringFieldUpdateOperationsInput | string
   eventCategory?: Prisma.EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+  eventTheme?: Prisma.EnumEventThemeFieldUpdateOperationsInput | $Enums.EventTheme
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizer?: Prisma.UserUpdateOneRequiredWithoutOrganizedEventsNestedInput
@@ -851,6 +883,7 @@ export type EventUncheckedUpdateWithoutParticipantsInput = {
   fee?: Prisma.FloatFieldUpdateOperationsInput | number
   image?: Prisma.StringFieldUpdateOperationsInput | string
   eventCategory?: Prisma.EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+  eventTheme?: Prisma.EnumEventThemeFieldUpdateOperationsInput | $Enums.EventTheme
   organizerId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -870,6 +903,7 @@ export type EventCreateWithoutInvitationsInput = {
   fee?: number
   image: string
   eventCategory?: $Enums.EventCategory
+  eventTheme?: $Enums.EventTheme
   createdAt?: Date | string
   updatedAt?: Date | string
   organizer: Prisma.UserCreateNestedOneWithoutOrganizedEventsInput
@@ -889,6 +923,7 @@ export type EventUncheckedCreateWithoutInvitationsInput = {
   fee?: number
   image: string
   eventCategory?: $Enums.EventCategory
+  eventTheme?: $Enums.EventTheme
   organizerId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -924,6 +959,7 @@ export type EventUpdateWithoutInvitationsInput = {
   fee?: Prisma.FloatFieldUpdateOperationsInput | number
   image?: Prisma.StringFieldUpdateOperationsInput | string
   eventCategory?: Prisma.EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+  eventTheme?: Prisma.EnumEventThemeFieldUpdateOperationsInput | $Enums.EventTheme
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizer?: Prisma.UserUpdateOneRequiredWithoutOrganizedEventsNestedInput
@@ -943,6 +979,7 @@ export type EventUncheckedUpdateWithoutInvitationsInput = {
   fee?: Prisma.FloatFieldUpdateOperationsInput | number
   image?: Prisma.StringFieldUpdateOperationsInput | string
   eventCategory?: Prisma.EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+  eventTheme?: Prisma.EnumEventThemeFieldUpdateOperationsInput | $Enums.EventTheme
   organizerId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -962,6 +999,7 @@ export type EventCreateWithoutPaymentsInput = {
   fee?: number
   image: string
   eventCategory?: $Enums.EventCategory
+  eventTheme?: $Enums.EventTheme
   createdAt?: Date | string
   updatedAt?: Date | string
   organizer: Prisma.UserCreateNestedOneWithoutOrganizedEventsInput
@@ -981,6 +1019,7 @@ export type EventUncheckedCreateWithoutPaymentsInput = {
   fee?: number
   image: string
   eventCategory?: $Enums.EventCategory
+  eventTheme?: $Enums.EventTheme
   organizerId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1016,6 +1055,7 @@ export type EventUpdateWithoutPaymentsInput = {
   fee?: Prisma.FloatFieldUpdateOperationsInput | number
   image?: Prisma.StringFieldUpdateOperationsInput | string
   eventCategory?: Prisma.EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+  eventTheme?: Prisma.EnumEventThemeFieldUpdateOperationsInput | $Enums.EventTheme
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizer?: Prisma.UserUpdateOneRequiredWithoutOrganizedEventsNestedInput
@@ -1035,6 +1075,7 @@ export type EventUncheckedUpdateWithoutPaymentsInput = {
   fee?: Prisma.FloatFieldUpdateOperationsInput | number
   image?: Prisma.StringFieldUpdateOperationsInput | string
   eventCategory?: Prisma.EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+  eventTheme?: Prisma.EnumEventThemeFieldUpdateOperationsInput | $Enums.EventTheme
   organizerId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1054,6 +1095,7 @@ export type EventCreateWithoutReviewsInput = {
   fee?: number
   image: string
   eventCategory?: $Enums.EventCategory
+  eventTheme?: $Enums.EventTheme
   createdAt?: Date | string
   updatedAt?: Date | string
   organizer: Prisma.UserCreateNestedOneWithoutOrganizedEventsInput
@@ -1073,6 +1115,7 @@ export type EventUncheckedCreateWithoutReviewsInput = {
   fee?: number
   image: string
   eventCategory?: $Enums.EventCategory
+  eventTheme?: $Enums.EventTheme
   organizerId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1108,6 +1151,7 @@ export type EventUpdateWithoutReviewsInput = {
   fee?: Prisma.FloatFieldUpdateOperationsInput | number
   image?: Prisma.StringFieldUpdateOperationsInput | string
   eventCategory?: Prisma.EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+  eventTheme?: Prisma.EnumEventThemeFieldUpdateOperationsInput | $Enums.EventTheme
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizer?: Prisma.UserUpdateOneRequiredWithoutOrganizedEventsNestedInput
@@ -1127,6 +1171,7 @@ export type EventUncheckedUpdateWithoutReviewsInput = {
   fee?: Prisma.FloatFieldUpdateOperationsInput | number
   image?: Prisma.StringFieldUpdateOperationsInput | string
   eventCategory?: Prisma.EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+  eventTheme?: Prisma.EnumEventThemeFieldUpdateOperationsInput | $Enums.EventTheme
   organizerId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1146,6 +1191,7 @@ export type EventCreateManyOrganizerInput = {
   fee?: number
   image: string
   eventCategory?: $Enums.EventCategory
+  eventTheme?: $Enums.EventTheme
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1161,6 +1207,7 @@ export type EventUpdateWithoutOrganizerInput = {
   fee?: Prisma.FloatFieldUpdateOperationsInput | number
   image?: Prisma.StringFieldUpdateOperationsInput | string
   eventCategory?: Prisma.EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+  eventTheme?: Prisma.EnumEventThemeFieldUpdateOperationsInput | $Enums.EventTheme
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   participants?: Prisma.EventParticipantUpdateManyWithoutEventNestedInput
@@ -1180,6 +1227,7 @@ export type EventUncheckedUpdateWithoutOrganizerInput = {
   fee?: Prisma.FloatFieldUpdateOperationsInput | number
   image?: Prisma.StringFieldUpdateOperationsInput | string
   eventCategory?: Prisma.EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+  eventTheme?: Prisma.EnumEventThemeFieldUpdateOperationsInput | $Enums.EventTheme
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   participants?: Prisma.EventParticipantUncheckedUpdateManyWithoutEventNestedInput
@@ -1199,6 +1247,7 @@ export type EventUncheckedUpdateManyWithoutOrganizerInput = {
   fee?: Prisma.FloatFieldUpdateOperationsInput | number
   image?: Prisma.StringFieldUpdateOperationsInput | string
   eventCategory?: Prisma.EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+  eventTheme?: Prisma.EnumEventThemeFieldUpdateOperationsInput | $Enums.EventTheme
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1272,6 +1321,7 @@ export type EventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   fee?: boolean
   image?: boolean
   eventCategory?: boolean
+  eventTheme?: boolean
   organizerId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1294,6 +1344,7 @@ export type EventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   fee?: boolean
   image?: boolean
   eventCategory?: boolean
+  eventTheme?: boolean
   organizerId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1311,6 +1362,7 @@ export type EventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   fee?: boolean
   image?: boolean
   eventCategory?: boolean
+  eventTheme?: boolean
   organizerId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1328,12 +1380,13 @@ export type EventSelectScalar = {
   fee?: boolean
   image?: boolean
   eventCategory?: boolean
+  eventTheme?: boolean
   organizerId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "date" | "time" | "venue" | "type" | "fee" | "image" | "eventCategory" | "organizerId" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "date" | "time" | "venue" | "type" | "fee" | "image" | "eventCategory" | "eventTheme" | "organizerId" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
 export type EventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organizer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   participants?: boolean | Prisma.Event$participantsArgs<ExtArgs>
@@ -1369,6 +1422,7 @@ export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     fee: number
     image: string
     eventCategory: $Enums.EventCategory
+    eventTheme: $Enums.EventTheme
     organizerId: string
     createdAt: Date
     updatedAt: Date
@@ -1810,6 +1864,7 @@ export interface EventFieldRefs {
   readonly fee: Prisma.FieldRef<"Event", 'Float'>
   readonly image: Prisma.FieldRef<"Event", 'String'>
   readonly eventCategory: Prisma.FieldRef<"Event", 'EventCategory'>
+  readonly eventTheme: Prisma.FieldRef<"Event", 'EventTheme'>
   readonly organizerId: Prisma.FieldRef<"Event", 'String'>
   readonly createdAt: Prisma.FieldRef<"Event", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Event", 'DateTime'>

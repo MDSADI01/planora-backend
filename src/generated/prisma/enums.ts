@@ -33,6 +33,18 @@ export const EventCategory = {
 export type EventCategory = (typeof EventCategory)[keyof typeof EventCategory]
 
 
+export const EventTheme = {
+  CONFERENCES: 'CONFERENCES',
+  MUSIC_FESTIVAL: 'MUSIC_FESTIVAL',
+  WORKSHOPS: 'WORKSHOPS',
+  WEDDINGS: 'WEDDINGS',
+  SPORTS_EVENTS: 'SPORTS_EVENTS',
+  MEETUPS: 'MEETUPS'
+} as const
+
+export type EventTheme = (typeof EventTheme)[keyof typeof EventTheme]
+
+
 export const ParticipantStatus = {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',

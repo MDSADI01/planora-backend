@@ -152,6 +152,13 @@ export type EnumEventCategoryFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumEventCategoryFilter<$PrismaModel> | $Enums.EventCategory
 }
 
+export type EnumEventThemeFilter<$PrismaModel = never> = {
+  equals?: $Enums.EventTheme | Prisma.EnumEventThemeFieldRefInput<$PrismaModel>
+  in?: $Enums.EventTheme[] | Prisma.ListEnumEventThemeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EventTheme[] | Prisma.ListEnumEventThemeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEventThemeFilter<$PrismaModel> | $Enums.EventTheme
+}
+
 export type EnumEventTypeWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.EventType | Prisma.EnumEventTypeFieldRefInput<$PrismaModel>
   in?: $Enums.EventType[] | Prisma.ListEnumEventTypeFieldRefInput<$PrismaModel>
@@ -186,6 +193,16 @@ export type EnumEventCategoryWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumEventCategoryFilter<$PrismaModel>
   _max?: Prisma.NestedEnumEventCategoryFilter<$PrismaModel>
+}
+
+export type EnumEventThemeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EventTheme | Prisma.EnumEventThemeFieldRefInput<$PrismaModel>
+  in?: $Enums.EventTheme[] | Prisma.ListEnumEventThemeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EventTheme[] | Prisma.ListEnumEventThemeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEventThemeWithAggregatesFilter<$PrismaModel> | $Enums.EventTheme
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEventThemeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEventThemeFilter<$PrismaModel>
 }
 
 export type EnumParticipantStatusFilter<$PrismaModel = never> = {
@@ -390,6 +407,13 @@ export type NestedEnumEventCategoryFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumEventCategoryFilter<$PrismaModel> | $Enums.EventCategory
 }
 
+export type NestedEnumEventThemeFilter<$PrismaModel = never> = {
+  equals?: $Enums.EventTheme | Prisma.EnumEventThemeFieldRefInput<$PrismaModel>
+  in?: $Enums.EventTheme[] | Prisma.ListEnumEventThemeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EventTheme[] | Prisma.ListEnumEventThemeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEventThemeFilter<$PrismaModel> | $Enums.EventTheme
+}
+
 export type NestedEnumEventTypeWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.EventType | Prisma.EnumEventTypeFieldRefInput<$PrismaModel>
   in?: $Enums.EventType[] | Prisma.ListEnumEventTypeFieldRefInput<$PrismaModel>
@@ -424,6 +448,16 @@ export type NestedEnumEventCategoryWithAggregatesFilter<$PrismaModel = never> = 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumEventCategoryFilter<$PrismaModel>
   _max?: Prisma.NestedEnumEventCategoryFilter<$PrismaModel>
+}
+
+export type NestedEnumEventThemeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EventTheme | Prisma.EnumEventThemeFieldRefInput<$PrismaModel>
+  in?: $Enums.EventTheme[] | Prisma.ListEnumEventThemeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EventTheme[] | Prisma.ListEnumEventThemeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEventThemeWithAggregatesFilter<$PrismaModel> | $Enums.EventTheme
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEventThemeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEventThemeFilter<$PrismaModel>
 }
 
 export type NestedEnumParticipantStatusFilter<$PrismaModel = never> = {

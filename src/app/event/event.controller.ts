@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import * as eventService from "./event.service";
-import { EventType, EventCategory } from "../../generated/prisma/client";
+import { EventType, EventCategory, EventTheme } from "../../generated/prisma/client";
 
 export const createEvent = async (
   req: Request,
@@ -18,6 +18,7 @@ export const createEvent = async (
       type,
       fee,
       eventCategory,
+      eventTheme,
     } = req.body;
     const userId = req.user!.userId;
 
@@ -31,6 +32,7 @@ export const createEvent = async (
       type: type as EventType,
       fee: fee ? Number(fee) : 0,
       eventCategory: eventCategory as EventCategory,
+      eventTheme: eventTheme as EventTheme,
       organizerId: userId,
     });
 
@@ -47,17 +49,19 @@ export const getEvents = async (
   next: NextFunction
 ) => {
   try {
-    const { eventCategory, type, search, isFree } = req.query;
+    const { eventCategory, type, eventTheme, search, isFree } = req.query;
 
     const filters: {
       eventCategory?: EventCategory;
       type?: EventType;
+      eventTheme?: EventTheme;
       searchTerm?: string;
       isFree?: boolean;
     } = {};
 
     if (eventCategory) filters.eventCategory = eventCategory as EventCategory;
     if (type) filters.type = type as EventType;
+    if (eventTheme) filters.eventTheme = eventTheme as EventTheme;
     if (search) filters.searchTerm = search as string;
     if (isFree !== undefined) filters.isFree = isFree === "true";
 
@@ -123,6 +127,50 @@ export const deleteEvent = async (
   } catch (err) {
     const error = err as any;
     if (error.message?.includes("Unauthorized")) error.status = 403;
+    next(error);
+  }
+};
+
+export const getTrendingEvents = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const events = await eventService.getTrendingEvents();
+    res.status(200).json({ success: true, data: events });
+  } catch (err) {
+    const error = err as any;
+    next(error);
+  }
+};
+
+export const getSearchSuggestions = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { q } = req.query;
+    const suggestions = await eventService.getSearchSuggestions((q as string) || "");
+    res.status(200).json({ success: true, data: suggestions });
+  } catch (err) {
+    const error = err as any;
+    next(error);
+  }
+};
+
+export const getRecommendations = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId = req.user!.userId;
+    const events = await eventService.getRecommendations(userId);
+    res.status(200).json({ success: true, data: events });
+  } catch (err) {
+    const error = err as any;
     next(error);
   }
 };

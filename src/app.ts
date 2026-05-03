@@ -15,7 +15,11 @@ const app: Application = express();
 export const port = process.env.PORT || 8000;
 
 // Stripe webhooks must use raw body before JSON middleware.
-app.post("/webhook", express.raw({ type: "application/json" }), PaymentController.handleStripeWebhookEvent);
+app.post(
+  "/webhook",
+  express.raw({ type: "application/json" }),
+  PaymentController.handleStripeWebhookEvent
+);
 
 app.use(
   cors({
@@ -34,18 +38,17 @@ app.use(express.json());
 app.use(cookieParser());
 
 // API Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/events', eventRoutes);
-app.use('/api/participants', participantRoutes);
-app.use('/api/reviews', reviewRoutes);
-app.use('/api/invitations', invitationRoutes);
-app.use('/api/payments', paymentRoutes);
-
+app.use("/api/auth", authRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/events", eventRoutes);
+app.use("/api/participants", participantRoutes);
+app.use("/api/reviews", reviewRoutes);
+app.use("/api/invitations", invitationRoutes);
+app.use("/api/payments", paymentRoutes);
 
 // Basic route
-app.get('/', (req: Request, res: Response) => {
-  res.send('Planora API running successfully!');
+app.get("/", (req: Request, res: Response) => {
+  res.send("Planora API running successfully!");
 });
 
 // Global Error Handler

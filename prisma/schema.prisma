@@ -27,6 +27,15 @@ enum EventCategory {
   PRIVATE
 }
 
+enum EventTheme {
+  CONFERENCES
+  MUSIC_FESTIVAL
+  WORKSHOPS
+  WEDDINGS
+  SPORTS_EVENTS
+  MEETUPS
+}
+
 enum ParticipantStatus {
   PENDING
   APPROVED
@@ -62,6 +71,7 @@ model User {
   invitations     Invitation[]
   payments        Payment[]
   reviews         Review[]
+ 
   createdAt       DateTime           @default(now())
   updatedAt       DateTime           @updatedAt
 
@@ -79,6 +89,7 @@ model Event {
   fee          Float              @default(0)
   image        String
   eventCategory EventCategory     @default(PUBLIC)
+  eventTheme   EventTheme         @default(CONFERENCES)
 
   organizerId  String
   organizer    User               @relation("OrganizedEvents", fields: [organizerId], references: [id],onDelete: Cascade)
@@ -155,3 +166,4 @@ model Review {
   @@unique([eventId, userId])
  
 }
+

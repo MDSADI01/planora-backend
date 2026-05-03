@@ -5,6 +5,9 @@ import { Role } from '../../generated/prisma/enums';
 
 const router = Router();
 
+router.get('/search-suggestions', eventController.getSearchSuggestions);
+router.get('/recommendations', authorization(Role.USER, Role.ADMIN), eventController.getRecommendations);
+router.get('/trending', eventController.getTrendingEvents);
 router.get('/', eventController.getEvents);
 router.get('/:id', eventController.getEventById);
 
