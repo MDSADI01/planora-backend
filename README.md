@@ -21,7 +21,18 @@ This API supports full CRUD operations and is optimized to serve frontend applic
 
 ## ✨ Key Features
 
-- 📋 Create, update, and delete tasks  
+- 🔐 JWT Authentication & Authorization for secure access  
+- 👨‍💼 Role-based access control (Admin, Provider, Customer)  
+- 🍔 Full CRUD operations for food items management  
+- 🛒 Event Register (create, update, track orders)  
+- 🗄️ PostgreSQL database integration with Prisma ORM  
+- ⚡ High-performance REST API with optimized response time  
+- 🧩 Modular architecture (Routes → Controllers → Services)  
+- 🛡️ Secure password hashing using bcrypt  
+- 🚨 Global error handling and validation system  
+- 🌐 Environment-based configuration using dotenv  
+- 📦 Scalable and maintainable code structure  
+- 🔗 RESTful API design for frontend integration  
 
 ---
 
