@@ -7,6 +7,7 @@ import invitationRoutes from "./app/invitation/invitation.routes";
 import paymentRoutes from "./app/payment/payment.routes";
 import reviewRoutes from "./app/review/review.routes";
 import adminRoutes from "./app/admin/admin.routes";
+import aiRoutes from "./app/ai/ai.routes";
 import { globalErrorHandler } from "./app/middleware/error.middleware";
 import { PaymentController } from "./app/payment/payment.controller";
 import cors from "cors";
@@ -45,6 +46,7 @@ app.use("/api/participants", participantRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/invitations", invitationRoutes);
 app.use("/api/payments", paymentRoutes);
+app.use("/api/ai", aiRoutes);
 
 // Basic route
 app.get("/", (req: Request, res: Response) => {

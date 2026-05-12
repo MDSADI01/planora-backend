@@ -2,6 +2,12 @@ import { Request, Response, NextFunction } from "express";
 import * as eventService from "./event.service";
 import { EventType, EventCategory, EventTheme } from "../../generated/prisma/client";
 
+type ControllerError = Error & { status?: number };
+
+const toControllerError = (err: unknown): ControllerError => {
+  return err instanceof Error ? err : new Error("Unexpected error");
+};
+
 export const createEvent = async (
   req: Request,
   res: Response,
@@ -38,8 +44,7 @@ export const createEvent = async (
 
     res.status(201).json({ success: true, data: event });
   } catch (err) {
-    const error = err as any;
-    next(error);
+    next(toControllerError(err));
   }
 };
 
@@ -68,8 +73,7 @@ export const getEvents = async (
     const events = await eventService.getEvents(filters);
     res.status(200).json({ success: true, data: events });
   } catch (err) {
-    const error = err as any;
-    next(error);
+    next(toControllerError(err));
   }
 };
 
@@ -80,14 +84,16 @@ export const getEventById = async (
 ) => {
   try {
     const event = await eventService.getEventById(req.params.id as string);
-    if (!event)
-      return res
+    if (!event) {
+      res
         .status(404)
         .json({ success: false, message: "Event not found" });
+      return;
+    }
+
     res.status(200).json({ success: true, data: event });
   } catch (err) {
-    const error = err as any;
-    next(error);
+    next(toControllerError(err));
   }
 };
 
@@ -104,7 +110,7 @@ export const updateEvent = async (
     );
     res.status(200).json({ success: true, data: event });
   } catch (err) {
-    const error = err as any;
+    const error = toControllerError(err);
     if (error.message?.includes("Unauthorized")) error.status = 403;
     next(error);
   }
@@ -125,7 +131,7 @@ export const deleteEvent = async (
       .status(200)
       .json({ success: true, message: "Event deleted successfully" });
   } catch (err) {
-    const error = err as any;
+    const error = toControllerError(err);
     if (error.message?.includes("Unauthorized")) error.status = 403;
     next(error);
   }
@@ -140,8 +146,7 @@ export const getTrendingEvents = async (
     const events = await eventService.getTrendingEvents();
     res.status(200).json({ success: true, data: events });
   } catch (err) {
-    const error = err as any;
-    next(error);
+    next(toControllerError(err));
   }
 };
 
@@ -155,8 +160,7 @@ export const getSearchSuggestions = async (
     const suggestions = await eventService.getSearchSuggestions((q as string) || "");
     res.status(200).json({ success: true, data: suggestions });
   } catch (err) {
-    const error = err as any;
-    next(error);
+    next(toControllerError(err));
   }
 };
 
@@ -170,7 +174,6 @@ export const getRecommendations = async (
     const events = await eventService.getRecommendations(userId);
     res.status(200).json({ success: true, data: events });
   } catch (err) {
-    const error = err as any;
-    next(error);
+    next(toControllerError(err));
   }
 };

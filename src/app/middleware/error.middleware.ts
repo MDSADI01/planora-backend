@@ -1,16 +1,26 @@
 import { Request, Response, NextFunction } from 'express';
 import { Prisma } from '../../generated/prisma/client';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AppError = Error & {
+  status?: number;
+  stack?: string;
+};
+
+const isAppError = (err: unknown): err is AppError => {
+  return err instanceof Error;
+};
+
 export const globalErrorHandler = (
-  err: any,
+  err: unknown,
   req: Request,
   res: Response,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next: NextFunction
 ) => {
-  let statusCode = err.status || 500;
-  let message = err.message || 'Internal Server Error';
+  void req;
+  void next;
+
+  let statusCode = isAppError(err) ? err.status ?? 500 : 500;
+  let message = isAppError(err) ? err.message : 'Internal Server Error';
 
   // Prisma Errors Handling
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
@@ -32,6 +42,7 @@ export const globalErrorHandler = (
   res.status(statusCode).json({
     success: false,
     message,
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
+    ...(process.env.NODE_ENV === 'development' &&
+      isAppError(err) && { stack: err.stack }),
   });
 };

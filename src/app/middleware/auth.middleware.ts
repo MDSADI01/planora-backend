@@ -2,45 +2,55 @@ import { Request, Response, NextFunction } from 'express';
 import { verifyToken } from '../auth/jwt.util';
 import { Role } from '../../generated/prisma/client';
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: {
-        userId: string;
-        role: string;
-      };
-    }
+declare module 'express-serve-static-core' {
+  interface Request {
+    user?: {
+      userId: string;
+      role: string;
+    };
   }
 }
 
 export const authorization = (...roles: Role[]) => {
-  return async (req: Request, res: Response, next: NextFunction) => {
+  return (req: Request, res: Response, next: NextFunction): void => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({
+      res.status(401).json({
         success: false,
         message: 'You are not authorized',
       });
+      return;
     }
 
     const token = authHeader.split(' ')[1];
+    if (!token) {
+      res.status(401).json({
+        success: false,
+        message: 'You are not authorized',
+      });
+      return;
+    }
+
+    let decoded: { userId: string; role: string };
 
     try {
-      const decoded = verifyToken(token) as { userId: string; role: string };
+      decoded = verifyToken(token) as { userId: string; role: string };
       req.user = decoded;
-    } catch (error) {
-      return res.status(401).json({
+    } catch {
+      res.status(401).json({
         success: false,
         message: 'Invalid or expired token',
       });
+      return;
     }
 
-    if (roles.length && !roles.includes(req.user.role as Role)) {
-      return res.status(403).json({
+    if (roles.length && !roles.includes(decoded.role as Role)) {
+      res.status(403).json({
         success: false,
         message: 'Forbidden! You are not authorized to access this page',
       });
+      return;
     }
     
     next();

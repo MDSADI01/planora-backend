@@ -1,15 +1,27 @@
-import { getGeminiModel } from '../../lib/gemini';
+import { getGeminiModel } from "../../lib/gemini";
+
+type EventCandidate = { id: string };
+
+const parseStringArray = (value: string): string[] => {
+  const parsed: unknown = JSON.parse(value);
+
+  if (!Array.isArray(parsed)) {
+    return [];
+  }
+
+  return parsed.filter((item): item is string => typeof item === "string");
+};
 
 export const generateSmartRecommendations = async (
-  userHistory: { relatedCategories: string[], relatedThemes: string[] },
-  upcomingEvents: any[]
+  userHistory: { relatedCategories: string[]; relatedThemes: string[] },
+  upcomingEvents: EventCandidate[]
 ): Promise<string[]> => {
-  const model = getGeminiModel("gemini-1.5-flash");
+  const model = getGeminiModel("gemini-2.5-flash");
 
   const prompt = `
     You are an AI Event Recommender.
-    User's preferred categories: ${userHistory.relatedCategories.join(', ')}.
-    User's preferred themes: ${userHistory.relatedThemes.join(', ')}.
+    User's preferred categories: ${userHistory.relatedCategories.join(", ")}.
+    User's preferred themes: ${userHistory.relatedThemes.join(", ")}.
     
     Here is a list of upcoming events in JSON format:
     ${JSON.stringify(upcomingEvents)}
@@ -22,7 +34,7 @@ export const generateSmartRecommendations = async (
     const result = await model.generateContent(prompt);
     const text = result.response.text().trim();
     const cleanedText = text.replace(/```json/g, "").replace(/```/g, "").trim();
-    return JSON.parse(cleanedText);
+    return parseStringArray(cleanedText);
   } catch (err) {
     console.error("AI Recommendation failed.", err);
     return [];
@@ -31,9 +43,9 @@ export const generateSmartRecommendations = async (
 
 export const generateSearchSuggestions = async (
   searchTerm: string,
-  eventPool: any[]
+  eventPool: EventCandidate[]
 ): Promise<string[]> => {
-  const model = getGeminiModel("gemini-1.5-flash");
+  const model = getGeminiModel("gemini-2.5-flash");
 
   const prompt = `
     You are a semantic search AI.
@@ -50,7 +62,7 @@ export const generateSearchSuggestions = async (
     const result = await model.generateContent(prompt);
     const text = result.response.text().trim();
     const cleanedText = text.replace(/```json/g, "").replace(/```/g, "").trim();
-    return JSON.parse(cleanedText);
+    return parseStringArray(cleanedText);
   } catch (err) {
     console.error("AI Search failed.", err);
     return [];

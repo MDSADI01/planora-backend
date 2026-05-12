@@ -58,15 +58,24 @@ export const getMyReviews = async (userId: string) => {
   });
 };
 
-export const updateReview = async (reviewId: string, userId: string, data: { rating?: number; reviewText?: string }) => {
+export const updateReview = async (
+  reviewId: string,
+  userId: string,
+  data: { rating?: number; reviewText?: string }
+) => {
   const review = await prisma.review.findUnique({ where: { id: reviewId } });
   if (!review || review.userId !== userId) {
     throw new Error('Unauthorized or review not found');
   }
 
+  const updateData = {
+    ...(data.rating !== undefined && { rating: data.rating }),
+    ...(data.reviewText !== undefined && { reviewText: data.reviewText }),
+  };
+
   return prisma.review.update({
     where: { id: reviewId },
-    data
+    data: updateData
   });
 };
 
